@@ -9529,6 +9529,11 @@
             "type": "string"
           }
         },
+        "required": [
+          "name",
+          "type",
+          "asset_types"
+        ],
         "type": "object"
       },
       "FilterFieldData": {
@@ -12502,6 +12507,10 @@
             "type": "string"
           }
         },
+        "required": [
+          "name",
+          "asset_types"
+        ],
         "type": "object"
       },
       "GroupFieldData": {
@@ -19154,6 +19163,11 @@
           },
           "monitor_id": {
             "description": "The ID of the monitor associated with this project",
+            "format": "uuid",
+            "type": "string"
+          },
+          "org_id": {
+            "description": "The ID of the organization that owns this project",
             "format": "uuid",
             "type": "string"
           },
@@ -26755,7 +26769,7 @@
         },
         "summary": "List or search all assets (synchronous) - Group scope (Early Access)",
         "tags": [
-          "Assets"
+          "Assets V2"
         ],
         "x-snyk-api-lifecycle": "released",
         "x-snyk-api-releases": [
@@ -26768,7 +26782,7 @@
       },
       "patch": {
         "description": "Partially updates multiple assets within a group context.\nMaximum of 100 assets can be updated per request.\nThe operation is transactional - all updates succeed or all fail.\n\n#### Required permissions\n\n- `Edit Group Details (group.edit)`",
-        "operationId": "updateAssetsGroupBulk",
+        "operationId": "updateAssetsBulkGroup",
         "parameters": [
           {
             "description": "The unique identifier of the group",
@@ -26843,7 +26857,7 @@
         },
         "summary": "Bulk update asset attributes - Group scope (Early Access)",
         "tags": [
-          "Assets"
+          "Assets V2"
         ],
         "x-snyk-api-lifecycle": "released",
         "x-snyk-api-releases": [
@@ -26857,7 +26871,7 @@
     },
     "/groups/{group_id}/inventory/assets/filters": {
       "get": {
-        "description": "Returns a list of valid field names that can be used for filtering assets using RSQL within a group context.\n\n#### Required permissions\n\n- `View Groups (group.read)`",
+        "description": "Returns a list of valid field names that can be used for filtering assets using RSQL.\nEach field includes its name, data type, and which asset types it applies to.\n\n#### Required permissions\n\n- `View Groups (group.read)`",
         "operationId": "getFilterFieldsGroup",
         "parameters": [
           {
@@ -26881,7 +26895,8 @@
             }
           },
           {
-            "description": "Comma-separated list of asset types to filter",
+            "description": "Comma-separated list of asset types to filter the available filter fields",
+            "example": "container_images",
             "in": "query",
             "name": "asset_types",
             "schema": {
@@ -26889,7 +26904,7 @@
             }
           },
           {
-            "description": "Maximum number of results to return",
+            "description": "Number of results to return",
             "in": "query",
             "name": "limit",
             "schema": {
@@ -26900,7 +26915,7 @@
             }
           },
           {
-            "description": "Cursor for forward pagination",
+            "description": "Cursor for fetching the next page of results",
             "in": "query",
             "name": "starting_after",
             "schema": {
@@ -26908,7 +26923,7 @@
             }
           },
           {
-            "description": "Cursor for backward pagination",
+            "description": "Cursor for fetching the previous page of results",
             "in": "query",
             "name": "ending_before",
             "schema": {
@@ -26962,7 +26977,7 @@
         },
         "summary": "Get available filter fields - Group scope (Early Access)",
         "tags": [
-          "Assets"
+          "Assets V2"
         ],
         "x-snyk-api-lifecycle": "released",
         "x-snyk-api-releases": [
@@ -27000,7 +27015,8 @@
             }
           },
           {
-            "description": "The unique identifier of the filter field",
+            "description": "The UUID of the filter field to get values for (from the filter fields list endpoint)",
+            "example": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
             "in": "path",
             "name": "filter_id",
             "required": true,
@@ -27010,7 +27026,8 @@
             }
           },
           {
-            "description": "Search query to filter values (autocomplete)",
+            "description": "Full text search term to filter the list of values. If keys_only is true, this will filter the keys of the object filter values. If key is provided, this will filter the value for the specific key of the object filter values.",
+            "example": "prod",
             "in": "query",
             "name": "q",
             "schema": {
@@ -27019,7 +27036,7 @@
             }
           },
           {
-            "description": "Maximum number of results to return",
+            "description": "Number of results to return",
             "in": "query",
             "name": "limit",
             "schema": {
@@ -27030,7 +27047,7 @@
             }
           },
           {
-            "description": "Cursor for forward pagination",
+            "description": "Cursor for fetching the next page of results",
             "in": "query",
             "name": "starting_after",
             "schema": {
@@ -27038,9 +27055,25 @@
             }
           },
           {
-            "description": "Cursor for backward pagination",
+            "description": "Cursor for fetching the previous page of results",
             "in": "query",
             "name": "ending_before",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Return only the keys of the object filter values",
+            "in": "query",
+            "name": "keys_only",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "description": "Return only the value for a specific key of the object filter values",
+            "in": "query",
+            "name": "key",
             "schema": {
               "type": "string"
             }
@@ -27095,7 +27128,7 @@
         },
         "summary": "Get filter value suggestions (autocomplete) - Group scope (Early Access)",
         "tags": [
-          "Assets"
+          "Assets V2"
         ],
         "x-snyk-api-lifecycle": "released",
         "x-snyk-api-releases": [
@@ -27214,7 +27247,7 @@
         },
         "summary": "Get available group fields - Group scope (Early Access)",
         "tags": [
-          "Assets"
+          "Assets V2"
         ],
         "x-snyk-api-lifecycle": "released",
         "x-snyk-api-releases": [
@@ -27354,7 +27387,7 @@
         },
         "summary": "Get group value aggregation - Group scope (Early Access)",
         "tags": [
-          "Assets"
+          "Assets V2"
         ],
         "x-snyk-api-lifecycle": "released",
         "x-snyk-api-releases": [
@@ -27460,7 +27493,7 @@
         },
         "summary": "Create an asset search (asynchronous) - Group scope (Early Access)",
         "tags": [
-          "Assets"
+          "Assets V2"
         ],
         "x-snyk-api-lifecycle": "released",
         "x-snyk-api-releases": [
@@ -27579,7 +27612,7 @@
         },
         "summary": "Retrieve asset search results (asynchronous) - Group scope (Early Access)",
         "tags": [
-          "Assets"
+          "Assets V2"
         ],
         "x-snyk-api-lifecycle": "released",
         "x-snyk-api-releases": [
@@ -27697,7 +27730,7 @@
         },
         "summary": "Get a single asset by ID - Group scope (Early Access)",
         "tags": [
-          "Assets"
+          "Assets V2"
         ],
         "x-snyk-api-lifecycle": "released",
         "x-snyk-api-releases": [
@@ -27828,7 +27861,7 @@
         },
         "summary": "Update asset attributes - Group scope (Early Access)",
         "tags": [
-          "Assets"
+          "Assets V2"
         ],
         "x-snyk-api-lifecycle": "released",
         "x-snyk-api-releases": [
@@ -42970,7 +43003,7 @@
         },
         "summary": "List or search all assets (synchronous) - Org scope (Early Access)",
         "tags": [
-          "Assets"
+          "Assets V2"
         ],
         "x-snyk-api-lifecycle": "released",
         "x-snyk-api-releases": [
@@ -42983,7 +43016,7 @@
       },
       "patch": {
         "description": "Partially updates multiple assets within an org context.\nMaximum of 100 assets can be updated per request.\nThe operation is transactional - all updates succeed or all fail.\n\n#### Required permissions\n\n- `Edit Organization (org.edit)`",
-        "operationId": "updateAssetsOrgBulk",
+        "operationId": "updateAssetsBulkOrg",
         "parameters": [
           {
             "description": "The unique identifier of the organization",
@@ -43058,7 +43091,7 @@
         },
         "summary": "Bulk update asset attributes - Org scope (Early Access)",
         "tags": [
-          "Assets"
+          "Assets V2"
         ],
         "x-snyk-api-lifecycle": "released",
         "x-snyk-api-releases": [
@@ -43072,7 +43105,7 @@
     },
     "/orgs/{org_id}/inventory/assets/filters": {
       "get": {
-        "description": "Returns a list of valid field names that can be used for filtering assets using RSQL within an org context.\n\n#### Required permissions\n\n- `View Organization (org.read)`",
+        "description": "Returns a list of valid field names that can be used for filtering assets using RSQL.\nEach field includes its name, data type, and which asset types it applies to.\n\n#### Required permissions\n\n- `View Organization (org.read)`",
         "operationId": "getFilterFieldsOrg",
         "parameters": [
           {
@@ -43096,7 +43129,8 @@
             }
           },
           {
-            "description": "Comma-separated list of asset types to filter",
+            "description": "Comma-separated list of asset types to filter the available filter fields",
+            "example": "container_images",
             "in": "query",
             "name": "asset_types",
             "schema": {
@@ -43104,7 +43138,7 @@
             }
           },
           {
-            "description": "Maximum number of results to return",
+            "description": "Number of results to return",
             "in": "query",
             "name": "limit",
             "schema": {
@@ -43115,7 +43149,7 @@
             }
           },
           {
-            "description": "Cursor for forward pagination",
+            "description": "Cursor for fetching the next page of results",
             "in": "query",
             "name": "starting_after",
             "schema": {
@@ -43123,7 +43157,7 @@
             }
           },
           {
-            "description": "Cursor for backward pagination",
+            "description": "Cursor for fetching the previous page of results",
             "in": "query",
             "name": "ending_before",
             "schema": {
@@ -43177,7 +43211,7 @@
         },
         "summary": "Get available filter fields - Org scope (Early Access)",
         "tags": [
-          "Assets"
+          "Assets V2"
         ],
         "x-snyk-api-lifecycle": "released",
         "x-snyk-api-releases": [
@@ -43215,7 +43249,8 @@
             }
           },
           {
-            "description": "The unique identifier of the filter field",
+            "description": "The UUID of the filter field to get values for (from the filter fields list endpoint)",
+            "example": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
             "in": "path",
             "name": "filter_id",
             "required": true,
@@ -43225,7 +43260,8 @@
             }
           },
           {
-            "description": "Search query to filter values (autocomplete)",
+            "description": "Full text search term to filter the list of values. If keys_only is true, this will filter the keys of the object filter values. If key is provided, this will filter the value for the specific key of the object filter values.",
+            "example": "prod",
             "in": "query",
             "name": "q",
             "schema": {
@@ -43234,7 +43270,7 @@
             }
           },
           {
-            "description": "Maximum number of results to return",
+            "description": "Number of results to return",
             "in": "query",
             "name": "limit",
             "schema": {
@@ -43245,7 +43281,7 @@
             }
           },
           {
-            "description": "Cursor for forward pagination",
+            "description": "Cursor for fetching the next page of results",
             "in": "query",
             "name": "starting_after",
             "schema": {
@@ -43253,9 +43289,25 @@
             }
           },
           {
-            "description": "Cursor for backward pagination",
+            "description": "Cursor for fetching the previous page of results",
             "in": "query",
             "name": "ending_before",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Return only the keys of the object filter values",
+            "in": "query",
+            "name": "keys_only",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "description": "Return only the value for a specific key of the object filter values",
+            "in": "query",
+            "name": "key",
             "schema": {
               "type": "string"
             }
@@ -43310,7 +43362,7 @@
         },
         "summary": "Get filter value suggestions (autocomplete) - Org scope (Early Access)",
         "tags": [
-          "Assets"
+          "Assets V2"
         ],
         "x-snyk-api-lifecycle": "released",
         "x-snyk-api-releases": [
@@ -43429,7 +43481,7 @@
         },
         "summary": "Get available group fields - Org scope (Early Access)",
         "tags": [
-          "Assets"
+          "Assets V2"
         ],
         "x-snyk-api-lifecycle": "released",
         "x-snyk-api-releases": [
@@ -43569,7 +43621,7 @@
         },
         "summary": "Get group value aggregation - Org scope (Early Access)",
         "tags": [
-          "Assets"
+          "Assets V2"
         ],
         "x-snyk-api-lifecycle": "released",
         "x-snyk-api-releases": [
@@ -43675,7 +43727,7 @@
         },
         "summary": "Create an asset search (asynchronous) - Org scope (Early Access)",
         "tags": [
-          "Assets"
+          "Assets V2"
         ],
         "x-snyk-api-lifecycle": "released",
         "x-snyk-api-releases": [
@@ -43794,7 +43846,7 @@
         },
         "summary": "Retrieve asset search results (asynchronous) - Org scope (Early Access)",
         "tags": [
-          "Assets"
+          "Assets V2"
         ],
         "x-snyk-api-lifecycle": "released",
         "x-snyk-api-releases": [
@@ -43912,7 +43964,7 @@
         },
         "summary": "Get a single asset by ID - Org scope (Early Access)",
         "tags": [
-          "Assets"
+          "Assets V2"
         ],
         "x-snyk-api-lifecycle": "released",
         "x-snyk-api-releases": [
@@ -44043,7 +44095,7 @@
         },
         "summary": "Update asset attributes - Org scope (Early Access)",
         "tags": [
-          "Assets"
+          "Assets V2"
         ],
         "x-snyk-api-lifecycle": "released",
         "x-snyk-api-releases": [
@@ -76883,7 +76935,7 @@
     "/tenants/{tenant_id}/inventory/assets": {
       "get": {
         "description": "Retrieves a polymorphic list of all asset types for a given tenant.\nThe response includes different asset types (containers, container images, etc.)\nin a single unified response following the JSON:API specification.\n\nThis endpoint supports both simple listing and synchronous search with filtering,\nsorting, and cursor-based pagination through query parameters.\n\n#### Required permissions\n\n- `View Tenant Details (tenant.read)`",
-        "operationId": "listAssets",
+        "operationId": "listAssetsTenant",
         "parameters": [
           {
             "description": "The unique identifier of the tenant",
@@ -76999,7 +77051,7 @@
         },
         "summary": "List or search all assets (synchronous) (Early Access)",
         "tags": [
-          "Assets"
+          "Assets V2"
         ],
         "x-snyk-api-lifecycle": "released",
         "x-snyk-api-releases": [
@@ -77011,8 +77063,8 @@
         "x-stability-level": "beta"
       },
       "patch": {
-        "description": "Partially updates multiple assets in a single request.\nMaximum of 100 assets can be updated per request.\nThe operation is transactional - all updates succeed or all fail.\nSupports updating class, labels (add/remove), and tags (add/remove).\n\n#### Required permissions\n\n- `Edit Tenant Details (tenant.edit)`",
-        "operationId": "updateAssetsBulk",
+        "description": "Partially updates multiple assets in a single request.  \nMaximum of 100 assets can be updated per request.\nThe operation is transactional - all updates succeed or all fail.\nSupports updating class, labels (add/remove), and tags (add/remove).\n\n#### Required permissions\n\n- `Edit Tenant Details (tenant.edit)`",
+        "operationId": "updateAssetsBulkTenant",
         "parameters": [
           {
             "description": "The unique identifier of the tenant",
@@ -77087,7 +77139,7 @@
         },
         "summary": "Bulk update asset attributes (Early Access)",
         "tags": [
-          "Assets"
+          "Assets V2"
         ],
         "x-snyk-api-lifecycle": "released",
         "x-snyk-api-releases": [
@@ -77102,7 +77154,7 @@
     "/tenants/{tenant_id}/inventory/assets/filters": {
       "get": {
         "description": "Returns a list of valid field names that can be used for filtering assets using RSQL.\nEach field includes its name, data type, and which asset types it applies to.\n\n#### Required permissions\n\n- `View Tenant Details (tenant.read)`",
-        "operationId": "getFilterFields",
+        "operationId": "getFilterFieldsTenant",
         "parameters": [
           {
             "description": "The unique identifier of the tenant",
@@ -77134,7 +77186,7 @@
             }
           },
           {
-            "description": "Number of results to return (not used, included for API compliance)",
+            "description": "Number of results to return",
             "in": "query",
             "name": "limit",
             "schema": {
@@ -77145,7 +77197,7 @@
             }
           },
           {
-            "description": "Cursor for fetching the next page of results (not used, included for API compliance)",
+            "description": "Cursor for fetching the next page of results",
             "in": "query",
             "name": "starting_after",
             "schema": {
@@ -77153,7 +77205,7 @@
             }
           },
           {
-            "description": "Cursor for fetching the previous page of results (not used, included for API compliance)",
+            "description": "Cursor for fetching the previous page of results",
             "in": "query",
             "name": "ending_before",
             "schema": {
@@ -77207,7 +77259,7 @@
         },
         "summary": "Get available filter fields (Early Access)",
         "tags": [
-          "Assets"
+          "Assets V2"
         ],
         "x-snyk-api-lifecycle": "released",
         "x-snyk-api-releases": [
@@ -77222,7 +77274,7 @@
     "/tenants/{tenant_id}/inventory/assets/filters/{filter_id}/values": {
       "get": {
         "description": "Returns a list of distinct values for a specific filter field.\nUseful for building autocomplete functionality in filter UIs.\n\nUse the UUID from the filter fields list endpoint to identify which field to query.\n\nFor object filter values, both the keys and values are returned.\n\n#### Required permissions\n\n- `View Tenant Details (tenant.read)`",
-        "operationId": "getFilterValues",
+        "operationId": "getFilterValuesTenant",
         "parameters": [
           {
             "description": "The unique identifier of the tenant",
@@ -77277,7 +77329,7 @@
             }
           },
           {
-            "description": "Cursor for fetching the next page of results (not used, included for API compliance)",
+            "description": "Cursor for fetching the next page of results",
             "in": "query",
             "name": "starting_after",
             "schema": {
@@ -77285,7 +77337,7 @@
             }
           },
           {
-            "description": "Cursor for fetching the previous page of results (not used, included for API compliance)",
+            "description": "Cursor for fetching the previous page of results",
             "in": "query",
             "name": "ending_before",
             "schema": {
@@ -77358,7 +77410,7 @@
         },
         "summary": "Get filter value suggestions (autocomplete) (Early Access)",
         "tags": [
-          "Assets"
+          "Assets V2"
         ],
         "x-snyk-api-lifecycle": "released",
         "x-snyk-api-releases": [
@@ -77373,7 +77425,7 @@
     "/tenants/{tenant_id}/inventory/assets/groups": {
       "get": {
         "description": "Returns a list of valid field names that can be used for grouping assets.\nEach field includes its name, data type, and which asset types it applies to.\n\n#### Required permissions\n\n- `View Tenant Details (tenant.read)`",
-        "operationId": "getGroupFields",
+        "operationId": "getGroupFieldsTenant",
         "parameters": [
           {
             "description": "The unique identifier of the tenant",
@@ -77478,7 +77530,7 @@
         },
         "summary": "Get available group fields (Early Access)",
         "tags": [
-          "Assets"
+          "Assets V2"
         ],
         "x-snyk-api-lifecycle": "released",
         "x-snyk-api-releases": [
@@ -77493,7 +77545,7 @@
     "/tenants/{tenant_id}/inventory/assets/groups/{group_field}/values": {
       "get": {
         "description": "Returns aggregated values for a specific group field, showing the count of assets\nfor each distinct value.\n\nUse the UUID from the group fields list endpoint to identify which field to query.\n\n#### Required permissions\n\n- `View Tenant Details (tenant.read)`",
-        "operationId": "getGroupValues",
+        "operationId": "getGroupValuesTenant",
         "parameters": [
           {
             "description": "The unique identifier of the tenant",
@@ -77618,7 +77670,7 @@
         },
         "summary": "Get group value aggregation (Early Access)",
         "tags": [
-          "Assets"
+          "Assets V2"
         ],
         "x-snyk-api-lifecycle": "released",
         "x-snyk-api-releases": [
@@ -77633,7 +77685,7 @@
     "/tenants/{tenant_id}/inventory/assets/searches": {
       "post": {
         "description": "Initiates an asynchronous search for assets and returns a redirect to the search results endpoint\n\n#### Required permissions\n\n- `View Tenant Details (tenant.read)`",
-        "operationId": "createAssetSearch",
+        "operationId": "createAssetSearchTenant",
         "parameters": [
           {
             "description": "The unique identifier of the tenant",
@@ -77724,7 +77776,7 @@
         },
         "summary": "Create an asset search (asynchronous) (Early Access)",
         "tags": [
-          "Assets"
+          "Assets V2"
         ],
         "x-snyk-api-lifecycle": "released",
         "x-snyk-api-releases": [
@@ -77739,7 +77791,7 @@
     "/tenants/{tenant_id}/inventory/assets/searches/{search_id}/results": {
       "get": {
         "description": "Gets paginated results for a previously initiated asset search\n\n#### Required permissions\n\n- `View Tenant Details (tenant.read)`",
-        "operationId": "getAssetSearchResults",
+        "operationId": "getAssetSearchResultsTenant",
         "parameters": [
           {
             "description": "The unique identifier of the tenant",
@@ -77844,7 +77896,7 @@
         },
         "summary": "Retrieve asset search results (asynchronous) (Early Access)",
         "tags": [
-          "Assets"
+          "Assets V2"
         ],
         "x-snyk-api-lifecycle": "released",
         "x-snyk-api-releases": [
@@ -77859,7 +77911,7 @@
     "/tenants/{tenant_id}/inventory/assets/{asset_id}": {
       "get": {
         "description": "Retrieves a single asset by its unique identifier.\nThe response includes the asset's details in JSON:API format.\nThe asset type is determined from the database and the appropriate\ndetails are returned polymorphically.\n\n#### Required permissions\n\n- `View Tenant Details (tenant.read)`",
-        "operationId": "getAsset",
+        "operationId": "getAssetTenant",
         "parameters": [
           {
             "description": "The unique identifier of the tenant",
@@ -77963,7 +78015,7 @@
         },
         "summary": "Get a single asset by ID (Early Access)",
         "tags": [
-          "Assets"
+          "Assets V2"
         ],
         "x-snyk-api-lifecycle": "released",
         "x-snyk-api-releases": [
@@ -77976,7 +78028,7 @@
       },
       "patch": {
         "description": "Partially updates an asset's attributes.\nSupports updating class, labels (add/remove), and tags (add/remove).\nAt least one attribute must be provided in the request.\n\n#### Required permissions\n\n- `Edit Tenant Details (tenant.edit)`",
-        "operationId": "updateAsset",
+        "operationId": "updateAssetTenant",
         "parameters": [
           {
             "description": "The unique identifier of the tenant",
@@ -78094,7 +78146,7 @@
         },
         "summary": "Update asset attributes (Early Access)",
         "tags": [
-          "Assets"
+          "Assets V2"
         ],
         "x-snyk-api-lifecycle": "released",
         "x-snyk-api-releases": [
