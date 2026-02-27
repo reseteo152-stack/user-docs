@@ -26,3 +26,19 @@ If you want to add an integration to Snyk, [apply to become a Snyk partner](http
 ## Security
 
 For any security issues or concerns, go to [SECURITY.md](SECURITY.md).
+docs/snyk-api/reference/README.md# Reference
+
+V1 API OpenAPI specification
+
+{% file src="../../.gitbook/assets/v1-api-spec.yaml" %}
+v1 API OpenAPI specification
+{% endfile %}
+
+REST OpenAPI specification
+
+
+
+{% file src="../../.gitbook/assets/rest-spec.json" %}
+REST OpenAPI specification
+{% endfile %}Un repositorio o paquete específico, como markitdown-mcp en PyPI o GitHub?
+docs/snyk-api/reference/README.md
